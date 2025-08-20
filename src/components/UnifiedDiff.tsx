@@ -138,7 +138,7 @@ export default function UnifiedDiff({ versionA, versionB, className = '', hideUn
             return (
               <div
                 key={index}
-                className="flex px-2 py-1 text-gray-500 text-center justify-center"
+                className="flex px-2 py-1 text-muted-foreground text-center justify-center"
               >
                 <span className="text-xs italic">{line.content}</span>
               </div>
@@ -150,19 +150,19 @@ export default function UnifiedDiff({ versionA, versionB, className = '', hideUn
               key={index}
               className={`flex px-2 py-1 min-h-[1.2rem] ${
                 line.type === 'removed' 
-                  ? 'bg-red-100 text-red-800' 
-                  : line.type === 'added'
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-white text-gray-700'
+                              ? 'bg-diff-removed-bg text-diff-removed-text border-l-4 border-diff-removed'
+            : line.type === 'added'
+            ? 'bg-diff-added-bg text-diff-added-text border-l-4 border-diff-added'
+                    : 'bg-card text-foreground'
               }`}
             >
               {/* Prefix */}
-              <span className="text-gray-500 mr-2 w-4 flex-shrink-0">
+              <span className="text-muted-foreground mr-2 w-4 flex-shrink-0">
                 {line.type === 'removed' ? '-' : line.type === 'added' ? '+' : ' '}
               </span>
               
               {/* Line number */}
-              <span className="text-gray-500 mr-2 w-8 text-right flex-shrink-0">
+              <span className="text-muted-foreground mr-2 w-8 text-right flex-shrink-0">
                 {line.lineNumber || ''}
               </span>
               
@@ -176,14 +176,14 @@ export default function UnifiedDiff({ versionA, versionB, className = '', hideUn
       </div>
 
       {/* Legend */}
-      <div className="bg-gray-50 border-t px-4 py-2 text-xs text-gray-600">
+      <div className="bg-muted border-t border-border px-4 py-2 text-xs text-muted-foreground">
         <div className="flex gap-4">
           <div className="flex items-center gap-1">
-            <span className="w-3 h-3 bg-red-100 border border-red-300"></span>
+            <span className="w-3 h-3 bg-diff-removed-bg border border-diff-removed"></span>
             <span>- Removed</span>
           </div>
           <div className="flex items-center gap-1">
-            <span className="w-3 h-3 bg-green-100 border border-green-300"></span>
+            <span className="w-3 h-3 bg-diff-added-bg border border-diff-added"></span>
             <span>+ Added</span>
           </div>
         </div>

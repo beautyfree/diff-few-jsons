@@ -149,10 +149,10 @@ export default function SideBySideDiff({ versionA, versionB, className = '', hid
           if ('type' in line && line.type === 'separator') {
             return (
               <div key={index} className="flex min-h-[1.2rem]">
-                <div className="flex-1 border-r border-gray-300 px-2 py-1 flex text-gray-500 text-center justify-center">
+                <div className="flex-1 border-r border-border px-2 py-1 flex text-muted-foreground text-center justify-center">
                   <span className="text-xs italic">{line.content}</span>
                 </div>
-                <div className="flex-1 px-2 py-1 flex text-gray-500 text-center justify-center">
+                <div className="flex-1 px-2 py-1 flex text-muted-foreground text-center justify-center">
                   <span className="text-xs italic">{line.content}</span>
                 </div>
               </div>
@@ -164,9 +164,9 @@ export default function SideBySideDiff({ versionA, versionB, className = '', hid
               {/* Left side - Original */}
               <div className={`flex-1 border-r border-border px-2 py-1 flex ${
                 line.type === 'removed' 
-                  ? 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-200 border-l-4 border-red-500 dark:border-red-400' 
+                  ? 'bg-diff-removed-bg text-diff-removed-text border-l-4 border-diff-removed' 
                   : line.type === 'modified'
-                    ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300' 
+                    ? 'bg-diff-modified-bg text-diff-modified-text' 
                     : 'bg-card text-foreground'
               }`}>
                 <span className="text-muted-foreground mr-2 w-8 text-right flex-shrink-0">
@@ -178,9 +178,9 @@ export default function SideBySideDiff({ versionA, versionB, className = '', hid
               {/* Right side - Modified */}
               <div className={`flex-1 px-2 py-1 flex ${
                 line.type === 'added' 
-                  ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-200 border-l-4 border-emerald-500 dark:border-emerald-400' 
+                  ? 'bg-diff-added-bg text-diff-added-text border-l-4 border-diff-added' 
                   : line.type === 'modified'
-                    ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300' 
+                    ? 'bg-diff-modified-bg text-diff-modified-text' 
                     : 'bg-card text-foreground'
               }`}>
                 <span className="text-muted-foreground mr-2 w-8 text-right flex-shrink-0">
@@ -197,19 +197,19 @@ export default function SideBySideDiff({ versionA, versionB, className = '', hid
       <div className="bg-muted border-t border-border px-4 py-2 text-xs text-muted-foreground">
         <div className="flex gap-4">
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 bg-red-100 border-l-4 border-red-500"></div>
+            <div className="w-3 h-3 bg-diff-removed-bg border-l-4 border-diff-removed"></div>
             <span>Removed</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 bg-green-100 border-l-4 border-green-500"></div>
+            <div className="w-3 h-3 bg-diff-added-bg border-l-4 border-diff-added"></div>
             <span>Added</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 bg-red-50"></div>
+            <div className="w-3 h-3 bg-diff-modified-bg"></div>
             <span>Modified (Left)</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 bg-green-50"></div>
+            <div className="w-3 h-3 bg-diff-modified-bg"></div>
             <span>Modified (Right)</span>
           </div>
         </div>

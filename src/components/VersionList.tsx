@@ -94,7 +94,7 @@ function VersionList({ className = '' }: VersionListProps) {
         )
       default:
         return (
-          <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+          <svg className="w-4 h-4 text-muted-foreground" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
           </svg>
         )
@@ -144,7 +144,7 @@ function VersionList({ className = '' }: VersionListProps) {
                 <div className="flex items-start space-x-3 flex-1 min-w-0">
                   {/* Drag Handle */}
                   <div className="flex-shrink-0 mt-1">
-                    <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4 text-muted-foreground" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M7 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 2zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 14zm6-8a2 2 0 1 1-.001-4.001A2 2 0 0 1 13 6zm0 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 14z" />
                     </svg>
                   </div>
@@ -162,7 +162,7 @@ function VersionList({ className = '' }: VersionListProps) {
                           type="text"
                           value={editLabel}
                           onChange={(e) => setEditLabel(e.target.value)}
-                          className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-2 py-1 text-sm border border-border rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                           placeholder="Version label"
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
@@ -177,7 +177,7 @@ function VersionList({ className = '' }: VersionListProps) {
                           type="datetime-local"
                           value={editTimestamp.slice(0, 16)}
                           onChange={(e) => setEditTimestamp(e.target.value + ':00.000Z')}
-                          className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-2 py-1 text-sm border border-border rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                         />
                         <div className="flex space-x-2">
                           <button
@@ -196,13 +196,13 @@ function VersionList({ className = '' }: VersionListProps) {
                       </div>
                     ) : (
                       <div>
-                        <h3 className="text-sm font-medium text-gray-900 truncate">
+                        <h3 className="text-sm font-medium text-foreground truncate">
                           {version.label}
                         </h3>
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {formatTimestamp(version.timestamp)}
                         </p>
-                        <p className="text-xs text-gray-400 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {version.source.type === 'file' && `File: ${version.source.ref}`}
                           {version.source.type === 'url' && `URL: ${version.source.ref}`}
                           {version.source.type === 'paste' && 'Pasted content'}
@@ -216,7 +216,7 @@ function VersionList({ className = '' }: VersionListProps) {
                     <div className="flex items-center space-x-1">
                       <button
                         onClick={() => startEditing(version)}
-                        className="p-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
+                        className="p-1 text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 rounded"
                         title="Edit version"
                       >
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -225,7 +225,7 @@ function VersionList({ className = '' }: VersionListProps) {
                       </button>
                       <button
                         onClick={() => removeVersion(version.id)}
-                        className="p-1 text-gray-400 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 rounded"
+                        className="p-1 text-muted-foreground hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 rounded"
                         title="Remove version"
                       >
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -239,7 +239,7 @@ function VersionList({ className = '' }: VersionListProps) {
 
               {/* JSON Preview */}
               {editingId !== version.id && (
-                <div className="mt-3 p-2 bg-gray-50 rounded text-xs font-mono text-gray-600 max-h-20 overflow-hidden">
+                <div className="mt-3 p-2 bg-muted rounded text-xs font-mono text-muted-foreground max-h-20 overflow-hidden">
                   {JSON.stringify(version.payload).slice(0, 100)}
                   {JSON.stringify(version.payload).length > 100 && '...'}
                 </div>
