@@ -12,39 +12,14 @@ const VersionList = dynamic(() => import('@/components/VersionList'), {
   loading: () => <div className="text-muted-foreground">Loading version list...</div>
 })
 
-const TimelineScrubber = dynamic(() => import('@/components/TimelineScrubber'), {
+const SequentialDiffs = dynamic(() => import('@/components/SequentialDiffs'), {
   ssr: false,
-  loading: () => <div className="text-muted-foreground">Loading timeline...</div>
-})
-
-const PairMatrix = dynamic(() => import('@/components/PairMatrix'), {
-  ssr: false,
-  loading: () => <div className="text-muted-foreground">Loading matrix...</div>
-})
-
-const DiffTreeView = dynamic(() => import('@/components/DiffTreeView'), {
-  ssr: false,
-  loading: () => <div className="text-muted-foreground">Loading diff view...</div>
-})
-
-const RulesPanel = dynamic(() => import('@/components/RulesPanel'), {
-  ssr: false,
-  loading: () => <div className="text-muted-foreground">Loading rules panel...</div>
-})
-
-const SearchBar = dynamic(() => import('@/components/SearchBar'), {
-  ssr: false,
-  loading: () => <div className="text-muted-foreground">Loading search...</div>
+  loading: () => <div className="text-muted-foreground">Loading diffs...</div>
 })
 
 const SessionBar = dynamic(() => import('@/components/SessionBar'), {
   ssr: false,
   loading: () => <div className="text-muted-foreground">Loading session controls...</div>
-})
-
-const Consent = dynamic(() => import('@/components/Consent'), {
-  ssr: false,
-  loading: () => <div className="text-muted-foreground">Loading privacy settings...</div>
 })
 
 export default function HomePage() {
@@ -65,57 +40,28 @@ export default function HomePage() {
             <div className="text-muted-foreground">Loading...</div>
           </div>
         }>
-          <div className="grid gap-6">
-              {/* Privacy & Consent */}
-              <div className="bg-card border rounded-lg p-6">
-                <h2 className="text-xl font-semibold mb-4">Privacy & Security</h2>
-                <Consent />
-              </div>
-
-            {/* SessionBar */}
+                    <div className="grid gap-6">
+            {/* Session Management */}
             <div className="bg-card border rounded-lg p-6">
               <SessionBar />
             </div>
 
-            {/* UploadPanel */}
+            {/* Upload JSON Files */}
             <div className="bg-card border rounded-lg p-6">
               <h2 className="text-xl font-semibold mb-4">Upload JSON Files</h2>
               <UploadPanel />
             </div>
 
-            {/* VersionList */}
+            {/* JSON Versions */}
             <div className="bg-card border rounded-lg p-6">
               <h2 className="text-xl font-semibold mb-4">JSON Versions</h2>
               <VersionList />
             </div>
 
-            {/* TimelineScrubber */}
+            {/* Sequential Diffs */}
             <div className="bg-card border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">Timeline</h2>
-              <TimelineScrubber />
-            </div>
-
-            {/* PairMatrix */}
-            <div className="bg-card border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">Comparison Matrix</h2>
-              <PairMatrix />
-            </div>
-
-            {/* RulesPanel */}
-            <div className="bg-card border rounded-lg p-6">
-              <RulesPanel />
-            </div>
-
-            {/* SearchBar */}
-            <div className="bg-card border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">Search</h2>
-              <SearchBar />
-            </div>
-
-            {/* DiffTreeView */}
-            <div className="bg-card border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">Diff View</h2>
-              <DiffTreeView />
+              <h2 className="text-xl font-semibold mb-4">Sequential Differences</h2>
+              <SequentialDiffs />
             </div>
           </div>
         </Suspense>
