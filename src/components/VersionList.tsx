@@ -103,12 +103,12 @@ function VersionList({ className = '' }: VersionListProps) {
 
   if (versions.length === 0) {
     return (
-      <div className={`p-6 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 text-center ${className}`}>
-        <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className={`p-6 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 text-center ${className}`}>
+        <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-        <h3 className="mt-2 text-sm font-medium text-gray-900">No versions yet</h3>
-        <p className="mt-1 text-sm text-gray-500">
+        <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No versions yet</h3>
+        <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
           Upload some JSON to get started
         </p>
       </div>
@@ -118,8 +118,8 @@ function VersionList({ className = '' }: VersionListProps) {
   return (
     <div className={`space-y-4 ${className}`}>
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-gray-900">JSON Versions</h2>
-        <span className="text-sm text-gray-500">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">JSON Versions</h2>
+        <span className="text-sm text-gray-600 dark:text-gray-300">
           {versions.length} version{versions.length !== 1 ? 's' : ''}
         </span>
       </div>
@@ -130,7 +130,7 @@ function VersionList({ className = '' }: VersionListProps) {
         onReorder={handleReorder}
         className="space-y-2"
       >
-        {versions.map((version, index) => (
+        {versions.map((version) => (
           <Reorder.Item
             key={version.id}
             value={version}
@@ -138,7 +138,7 @@ function VersionList({ className = '' }: VersionListProps) {
           >
             <motion.div
               layout
-              className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+              className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-start space-x-3 flex-1 min-w-0">

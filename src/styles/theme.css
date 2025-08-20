@@ -1,43 +1,9 @@
 /* Theme CSS with animated transitions */
 
+/* Animation properties */
 :root {
-  /* Light theme colors */
-  --color-background: #ffffff;
-  --color-foreground: #1f2937;
-  --color-card: #ffffff;
-  --color-card-foreground: #1f2937;
-  --color-muted: #f9fafb;
-  --color-muted-foreground: #6b7280;
-  --color-border: #e5e7eb;
-  --color-input: #ffffff;
-  --color-primary: #3b82f6;
-  --color-primary-foreground: #ffffff;
-  --color-secondary: #f1f5f9;
-  --color-secondary-foreground: #0f172a;
-  --color-accent: #f1f5f9;
-  --color-accent-foreground: #0f172a;
-  
-  /* Animation properties */
   --theme-transition-duration: 300ms;
   --theme-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-[data-theme="dark"] {
-  /* Dark theme colors */
-  --color-background: #0f172a;
-  --color-foreground: #f8fafc;
-  --color-card: #1e293b;
-  --color-card-foreground: #f8fafc;
-  --color-muted: #1e293b;
-  --color-muted-foreground: #94a3b8;
-  --color-border: #334155;
-  --color-input: #1e293b;
-  --color-primary: #3b82f6;
-  --color-primary-foreground: #ffffff;
-  --color-secondary: #1e293b;
-  --color-secondary-foreground: #f8fafc;
-  --color-accent: #1e293b;
-  --color-accent-foreground: #f8fafc;
 }
 
 /* Apply theme colors with smooth transitions */
@@ -50,44 +16,7 @@
 
 /* Base elements */
 body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
-}
-
-/* Tailwind CSS custom properties integration */
-.bg-background { background-color: var(--color-background); }
-.bg-foreground { background-color: var(--color-foreground); }
-.bg-card { background-color: var(--color-card); }
-.bg-muted { background-color: var(--color-muted); }
-.bg-primary { background-color: var(--color-primary); }
-.bg-secondary { background-color: var(--color-secondary); }
-.bg-accent { background-color: var(--color-accent); }
-
-.text-background { color: var(--color-background); }
-.text-foreground { color: var(--color-foreground); }
-.text-card-foreground { color: var(--color-card-foreground); }
-.text-muted-foreground { color: var(--color-muted-foreground); }
-.text-primary-foreground { color: var(--color-primary-foreground); }
-.text-secondary-foreground { color: var(--color-secondary-foreground); }
-.text-accent-foreground { color: var(--color-accent-foreground); }
-
-.border-border { border-color: var(--color-border); }
-
-/* Theme-aware component styles */
-.card {
-  background-color: var(--color-card);
-  color: var(--color-card-foreground);
-  border-color: var(--color-border);
-}
-
-.input {
-  background-color: var(--color-input);
-  border-color: var(--color-border);
-  color: var(--color-foreground);
-}
-
-.input:focus {
-  border-color: var(--color-primary);
+  @apply bg-white dark:bg-black text-gray-900 dark:text-white;
 }
 
 /* Animation classes for theme transitions */

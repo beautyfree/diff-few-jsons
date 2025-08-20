@@ -11,6 +11,58 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Apple-inspired theme colors
+        background: '#ffffff',
+        foreground: '#1d1d1f',
+        card: {
+          DEFAULT: '#ffffff',
+          foreground: '#1d1d1f',
+        },
+        muted: {
+          DEFAULT: '#f5f5f7',
+          foreground: '#86868b',
+        },
+        border: '#d2d2d7',
+        input: '#ffffff',
+        primary: {
+          DEFAULT: '#0071e3',
+          foreground: '#ffffff',
+        },
+        secondary: {
+          DEFAULT: '#f5f5f7',
+          foreground: '#1d1d1f',
+        },
+        accent: {
+          DEFAULT: '#f5f5f7',
+          foreground: '#1d1d1f',
+        },
+        // Dark mode colors
+        dark: {
+          background: '#000000',
+          foreground: '#ffffff',
+          card: {
+            DEFAULT: '#1c1c1e',
+            foreground: '#ffffff',
+          },
+          muted: {
+            DEFAULT: '#2c2c2e',
+            foreground: '#8e8e93',
+          },
+          border: '#38383a',
+          input: '#1c1c1e',
+          primary: {
+            DEFAULT: '#007aff',
+            foreground: '#ffffff',
+          },
+          secondary: {
+            DEFAULT: '#2c2c2e',
+            foreground: '#ffffff',
+          },
+          accent: {
+            DEFAULT: '#2c2c2e',
+            foreground: '#ffffff',
+          },
+        },
         // Semantic diff colors
         'diff-added': {
           50: '#f0fdf4',

@@ -8,13 +8,13 @@ import {
   Save, 
   Download, 
   Upload, 
+  FileText, 
   Sun, 
   Moon, 
   Settings, 
   AlertCircle, 
   CheckCircle, 
-  X,
-  FileText 
+  X
 } from 'lucide-react'
 
 interface SessionBarProps {
@@ -137,12 +137,7 @@ function SessionBar({ className = '' }: SessionBarProps) {
       session.versions.forEach(version => {
         store.addVersion(version)
       })
-      store.updateOptions(session.options)
-      store.setSelection(session.selection)
       store.setTheme(session.ui.theme)
-      store.setHideUnchanged(session.ui.hideUnchanged)
-      store.setSearchQuery(session.ui.searchQuery)
-      store.setRulesPanelExpanded(session.ui.rulesPanelExpanded)
       
       showNotification('success', 'Session loaded from browser storage')
     } catch (error) {
@@ -169,12 +164,7 @@ function SessionBar({ className = '' }: SessionBarProps) {
         session.versions.forEach(version => {
           store.addVersion(version)
         })
-        store.updateOptions(session.options)
-        store.setSelection(session.selection)
         store.setTheme(session.ui.theme)
-        store.setHideUnchanged(session.ui.hideUnchanged)
-        store.setSearchQuery(session.ui.searchQuery)
-        store.setRulesPanelExpanded(session.ui.rulesPanelExpanded)
         
         showNotification('success', `Session imported successfully (${session.versions.length} versions)`)
       } catch (error) {
@@ -230,8 +220,8 @@ function SessionBar({ className = '' }: SessionBarProps) {
       {/* Main Controls */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <Settings className="w-5 h-5 text-gray-600" />
-          <span className="text-lg font-semibold text-gray-900">Session</span>
+          <Settings className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+          <span className="text-lg font-semibold text-gray-900 dark:text-white">Session</span>
         </div>
 
         <div className="flex items-center space-x-2">
@@ -292,11 +282,7 @@ function SessionBar({ className = '' }: SessionBarProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={toggleTheme}
-            className={`flex items-center space-x-1 px-3 py-2 text-sm rounded-md transition-all duration-300 ${
-              store.ui.theme === 'light'
-                ? 'bg-gray-200 text-gray-800 hover:bg-gray-300'
-                : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
-            }`}
+            className="flex items-center space-x-1 px-3 py-2 text-sm rounded-md transition-all duration-300 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
             title={`Switch to ${store.ui.theme === 'light' ? 'dark' : 'light'} theme`}
           >
             <motion.div
@@ -314,40 +300,12 @@ function SessionBar({ className = '' }: SessionBarProps) {
         </div>
       </div>
 
-      {/* Session Info */}
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
-        <div className="bg-gray-50 p-3 rounded-lg">
-          <div className="font-medium text-gray-800 mb-1">Versions</div>
-          <div>{store.versions.length} JSON objects loaded</div>
-        </div>
-        
-        <div className="bg-gray-50 p-3 rounded-lg">
-          <div className="font-medium text-gray-800 mb-1">Rules</div>
-          <div>
-            {store.options.ignoreRules.length + store.options.transformRules.length} total rules
-            ({store.options.ignoreRules.filter(r => r.enabled).length + store.options.transformRules.filter(r => r.enabled).length} active)
-          </div>
-        </div>
-        
-        <div className="bg-gray-50 p-3 rounded-lg">
-          <div className="font-medium text-gray-800 mb-1">Theme</div>
-          <div className="flex items-center space-x-1">
-            {store.ui.theme === 'light' ? (
-              <Sun className="w-4 h-4" />
-            ) : (
-              <Moon className="w-4 h-4" />
-            )}
-            <span className="capitalize">{store.ui.theme}</span>
-          </div>
-        </div>
-      </div>
-
       {/* Storage Info */}
       {!isLocalStorageAvailable() && (
-        <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div className="mt-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
           <div className="flex items-start space-x-2">
-            <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-            <div className="text-sm text-yellow-800">
+            <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+            <div className="text-sm text-amber-800 dark:text-amber-200">
               <p className="font-medium mb-1">Limited Storage</p>
               <p>Browser storage is not available. You can still export and import sessions as JSON files.</p>
             </div>
@@ -377,17 +335,17 @@ function SessionBar({ className = '' }: SessionBarProps) {
           >
             <div className={`flex items-start space-x-2 p-4 rounded-lg shadow-lg max-w-sm ${
               notification.type === 'success' 
-                ? 'bg-green-50 border border-green-200' 
-                : 'bg-red-50 border border-red-200'
+                ? 'bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800' 
+                : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
             }`}>
               {notification.type === 'success' ? (
-                <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
               ) : (
-                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
               )}
               <div className="flex-1">
                 <p className={`text-sm font-medium ${
-                  notification.type === 'success' ? 'text-green-800' : 'text-red-800'
+                  notification.type === 'success' ? 'text-emerald-800 dark:text-emerald-200' : 'text-red-800 dark:text-red-200'
                 }`}>
                   {notification.message}
                 </p>
@@ -396,8 +354,8 @@ function SessionBar({ className = '' }: SessionBarProps) {
                 onClick={() => setNotification(prev => ({ ...prev, show: false }))}
                 className={`p-1 rounded hover:bg-opacity-20 ${
                   notification.type === 'success' 
-                    ? 'text-green-600 hover:bg-green-600' 
-                    : 'text-red-600 hover:bg-red-600'
+                    ? 'text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 dark:hover:bg-emerald-400' 
+                    : 'text-red-600 dark:text-red-400 hover:bg-red-600 dark:hover:bg-red-400'
                 }`}
               >
                 <X className="w-4 h-4" />

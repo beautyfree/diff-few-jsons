@@ -142,7 +142,7 @@ export default function SequentialDiffs() {
 
   if (versions.length < 2) {
     return (
-      <div className="text-center py-8 text-gray-500">
+      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
         <p>Add at least 2 JSON files to see sequential differences</p>
       </div>
     )
@@ -152,7 +152,7 @@ export default function SequentialDiffs() {
     <div className="space-y-6">
       {/* View Mode Toggle */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">View Mode</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">View Mode</h3>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <button
@@ -160,7 +160,7 @@ export default function SequentialDiffs() {
               className={`flex items-center gap-1 px-3 py-1 text-sm rounded ${
                 viewMode === 'side-by-side'
                   ? 'bg-blue-500 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
               }`}
             >
               <Split className="w-4 h-4" />
@@ -171,7 +171,7 @@ export default function SequentialDiffs() {
               className={`flex items-center gap-1 px-3 py-1 text-sm rounded ${
                 viewMode === 'unified'
                   ? 'bg-blue-500 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
               }`}
             >
               <Eye className="w-4 h-4" />
@@ -187,7 +187,7 @@ export default function SequentialDiffs() {
               onChange={(e) => setHideUnchanged(e.target.checked)}
               className="rounded"
             />
-            <label htmlFor="hideUnchanged" className="text-sm text-gray-700 cursor-pointer">
+            <label htmlFor="hideUnchanged" className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
               Hide unchanged lines
             </label>
           </div>
@@ -195,9 +195,9 @@ export default function SequentialDiffs() {
       </div>
 
       {sequentialPairs.map((pair, index) => (
-        <div key={`${pair.versionA.id}-${pair.versionB.id}`} className="border rounded-lg p-4">
+        <div key={`${pair.versionA.id}-${pair.versionB.id}`} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               {pair.versionA.label} → {pair.versionB.label}
             </h3>
             <div className="flex items-center gap-2">

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { JsonVersion } from '@/types'
+import { JsonVersion } from '@/types/domain'
 
 interface UnifiedDiffProps {
   versionA: JsonVersion
@@ -123,10 +123,10 @@ export default function UnifiedDiff({ versionA, versionB, className = '', hideUn
   })() : unifiedLines
 
   return (
-    <div className={`bg-white border rounded-lg overflow-hidden font-mono text-sm ${className}`}>
+    <div className={`bg-card border border-border rounded-lg overflow-hidden font-mono text-sm ${className}`}>
       {/* Header */}
-      <div className="bg-gray-50 border-b px-4 py-2">
-        <div className="text-sm font-medium text-gray-700">
+      <div className="bg-muted border-b border-border px-4 py-2">
+        <div className="text-sm font-medium text-foreground">
           {versionA.label} → {versionB.label}
         </div>
       </div>
