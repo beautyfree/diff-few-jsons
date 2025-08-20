@@ -216,7 +216,7 @@ function SessionBar({ className = '' }: SessionBarProps) {
   }, [store.versions.length, createSession, isLocalStorageAvailable])
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative p-6 bg-card rounded-lg shadow-sm border border-border ${className}`}>
       {/* Main Controls */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">

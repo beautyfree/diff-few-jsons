@@ -17,7 +17,11 @@ interface UploadStatus {
   progress?: number
 }
 
-function UploadPanel() {
+interface UploadPanelProps {
+  className?: string
+}
+
+function UploadPanel({ className = '' }: UploadPanelProps) {
   const { addVersion, versions } = useAppStore()
   const [errors, setErrors] = useState<UploadError[]>([])
   const [statuses, setStatuses] = useState<UploadStatus[]>([])
@@ -260,7 +264,7 @@ function UploadPanel() {
   }, [handleFileUpload])
 
   return (
-    <div className="space-y-6 p-6 bg-card rounded-lg shadow-sm border border-border">
+    <div className={`space-y-6 p-6 bg-card rounded-lg shadow-sm border border-border ${className}`}>
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-foreground">Upload JSON</h2>
         <span className="text-sm text-muted-foreground">

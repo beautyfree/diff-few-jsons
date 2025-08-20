@@ -42,27 +42,16 @@ export default function HomePage() {
         }>
                     <div className="grid gap-6">
             {/* Session Management */}
-            <div className="bg-card border border-border rounded-lg p-6">
-              <SessionBar />
-            </div>
+            <SessionBar />
 
             {/* Upload JSON Files */}
-            <div className="bg-card border border-border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4 text-foreground">Upload JSON Files</h2>
-              <UploadPanel />
-            </div>
+            <UploadPanel />
 
             {/* JSON Versions */}
-            <div className="bg-card border border-border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4 text-foreground">JSON Versions</h2>
-              <VersionList />
-            </div>
+            <VersionList />
 
             {/* Sequential Diffs */}
-            <div className="bg-card border border-border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4 text-foreground">Sequential Differences</h2>
-              <SequentialDiffs />
-            </div>
+            <SequentialDiffs />
           </div>
         </Suspense>
       </div>

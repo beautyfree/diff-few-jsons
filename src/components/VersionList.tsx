@@ -101,153 +101,151 @@ function VersionList({ className = '' }: VersionListProps) {
     }
   }, [])
 
-  if (versions.length === 0) {
-    return (
-      <div className={`p-6 bg-muted rounded-lg border-2 border-dashed border-border text-center ${className}`}>
-        <svg className="mx-auto h-12 w-12 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
-        <h3 className="mt-2 text-sm font-medium text-foreground">No versions yet</h3>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Upload some JSON to get started
-        </p>
-      </div>
-    )
-  }
-
   return (
-    <div className={`space-y-4 ${className}`}>
+    <div className={`space-y-4 p-6 bg-card rounded-lg shadow-sm border border-border ${className}`}>
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-foreground">JSON Versions</h2>
+        <h2 className="text-xl font-semibold text-foreground">JSON Versions</h2>
         <span className="text-sm text-muted-foreground">
           {versions.length} version{versions.length !== 1 ? 's' : ''}
         </span>
       </div>
 
-      <Reorder.Group
-        axis="y"
-        values={versions}
-        onReorder={handleReorder}
-        className="space-y-2"
-      >
-        {versions.map((version) => (
-          <Reorder.Item
-            key={version.id}
-            value={version}
-            className="cursor-move"
-          >
-            <motion.div
-              layout
-              className="bg-card border border-border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+      {versions.length === 0 ? (
+        <div className="p-6 bg-muted rounded-lg border-2 border-dashed border-border text-center">
+          <svg className="mx-auto h-12 w-12 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <h3 className="mt-2 text-sm font-medium text-foreground">No versions yet</h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Upload some JSON to get started
+          </p>
+        </div>
+      ) : (
+        <Reorder.Group
+          axis="y"
+          values={versions}
+          onReorder={handleReorder}
+          className="space-y-2"
+        >
+          {versions.map((version) => (
+            <Reorder.Item
+              key={version.id}
+              value={version}
+              className="cursor-move"
             >
-              <div className="flex items-start justify-between">
-                <div className="flex items-start space-x-3 flex-1 min-w-0">
-                  {/* Drag Handle */}
-                  <div className="flex-shrink-0 mt-1">
-                    <svg className="w-4 h-4 text-muted-foreground" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M7 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 2zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 14zm6-8a2 2 0 1 1-.001-4.001A2 2 0 0 1 13 6zm0 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 14z" />
-                    </svg>
-                  </div>
+              <motion.div
+                layout
+                className="bg-card border border-border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start space-x-3 flex-1 min-w-0">
+                    {/* Drag Handle */}
+                    <div className="flex-shrink-0 mt-1">
+                      <svg className="w-4 h-4 text-muted-foreground" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M7 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 2zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 7 14zm6-8a2 2 0 1 1-.001-4.001A2 2 0 0 1 13 6zm0 2a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 8zm0 6a2 2 0 1 1 .001 4.001A2 2 0 0 1 13 14z" />
+                      </svg>
+                    </div>
 
-                  {/* Source Icon */}
-                  <div className="flex-shrink-0 mt-1">
-                    {getSourceIcon(version.source)}
-                  </div>
+                    {/* Source Icon */}
+                    <div className="flex-shrink-0 mt-1">
+                      {getSourceIcon(version.source)}
+                    </div>
 
-                  {/* Version Info */}
-                  <div className="flex-1 min-w-0">
-                    {editingId === version.id ? (
-                      <div className="space-y-2">
-                        <input
-                          type="text"
-                          value={editLabel}
-                          onChange={(e) => setEditLabel(e.target.value)}
-                          className="w-full px-2 py-1 text-sm border border-border rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-                          placeholder="Version label"
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              saveEdit()
-                            } else if (e.key === 'Escape') {
-                              cancelEdit()
-                            }
-                          }}
-                          autoFocus
-                        />
-                        <input
-                          type="datetime-local"
-                          value={editTimestamp.slice(0, 16)}
-                          onChange={(e) => setEditTimestamp(e.target.value + ':00.000Z')}
-                          className="w-full px-2 py-1 text-sm border border-border rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-                        />
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={saveEdit}
-                            className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
-                          >
-                            Save
-                          </button>
-                          <button
-                            onClick={cancelEdit}
-                            className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-1"
-                          >
-                            Cancel
-                          </button>
+                    {/* Version Info */}
+                    <div className="flex-1 min-w-0">
+                      {editingId === version.id ? (
+                        <div className="space-y-2">
+                          <input
+                            type="text"
+                            value={editLabel}
+                            onChange={(e) => setEditLabel(e.target.value)}
+                            className="w-full px-2 py-1 text-sm border border-border rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                            placeholder="Version label"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                saveEdit()
+                              } else if (e.key === 'Escape') {
+                                cancelEdit()
+                              }
+                            }}
+                            autoFocus
+                          />
+                          <input
+                            type="datetime-local"
+                            value={editTimestamp.slice(0, 16)}
+                            onChange={(e) => setEditTimestamp(e.target.value + ':00.000Z')}
+                            className="w-full px-2 py-1 text-sm border border-border rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                          />
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={saveEdit}
+                              className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={cancelEdit}
+                              className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-1"
+                            >
+                              Cancel
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div>
-                        <h3 className="text-sm font-medium text-foreground truncate">
-                          {version.label}
-                        </h3>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {formatTimestamp(version.timestamp)}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {version.source.type === 'file' && `File: ${version.source.ref}`}
-                          {version.source.type === 'url' && `URL: ${version.source.ref}`}
-                          {version.source.type === 'paste' && 'Pasted content'}
-                        </p>
+                      ) : (
+                        <div>
+                          <h3 className="text-sm font-medium text-foreground truncate">
+                            {version.label}
+                          </h3>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {formatTimestamp(version.timestamp)}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {version.source.type === 'file' && `File: ${version.source.ref}`}
+                            {version.source.type === 'url' && `URL: ${version.source.ref}`}
+                            {version.source.type === 'paste' && 'Pasted content'}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Actions */}
+                    {editingId !== version.id && (
+                      <div className="flex items-center space-x-1">
+                        <button
+                          onClick={() => startEditing(version)}
+                          className="p-1 text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 rounded"
+                          title="Edit version"
+                        >
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => removeVersion(version.id)}
+                          className="p-1 text-muted-foreground hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 rounded"
+                          title="Remove version"
+                        >
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                          </svg>
+                        </button>
                       </div>
                     )}
                   </div>
-
-                  {/* Actions */}
-                  {editingId !== version.id && (
-                    <div className="flex items-center space-x-1">
-                      <button
-                        onClick={() => startEditing(version)}
-                        className="p-1 text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 rounded"
-                        title="Edit version"
-                      >
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                        </svg>
-                      </button>
-                      <button
-                        onClick={() => removeVersion(version.id)}
-                        className="p-1 text-muted-foreground hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 rounded"
-                        title="Remove version"
-                      >
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                        </svg>
-                      </button>
-                    </div>
-                  )}
                 </div>
-              </div>
 
-              {/* JSON Preview */}
-              {editingId !== version.id && (
-                <div className="mt-3 p-2 bg-muted rounded text-xs font-mono text-muted-foreground max-h-20 overflow-hidden">
-                  {JSON.stringify(version.payload).slice(0, 100)}
-                  {JSON.stringify(version.payload).length > 100 && '...'}
-                </div>
-              )}
-            </motion.div>
-          </Reorder.Item>
-        ))}
-      </Reorder.Group>
+                {/* JSON Preview */}
+                {editingId !== version.id && (
+                  <div className="mt-3 p-2 bg-muted rounded text-xs font-mono text-muted-foreground max-h-20 overflow-hidden">
+                    {JSON.stringify(version.payload).slice(0, 100)}
+                    {JSON.stringify(version.payload).length > 100 && '...'}
+                  </div>
+                )}
+              </motion.div>
+            </Reorder.Item>
+          ))}
+        </Reorder.Group>
+      )}
     </div>
   )
 }

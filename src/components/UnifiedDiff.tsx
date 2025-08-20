@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { JsonVersion } from '@/types/domain'
+import CopyButton from './CopyButton'
 
 interface UnifiedDiffProps {
   versionA: JsonVersion
@@ -18,6 +19,8 @@ export default function UnifiedDiff({ versionA, versionB, className = '', hideUn
       return 'Invalid JSON'
     }
   }
+
+
 
   const jsonA = formatJson(versionA.payload)
   const jsonB = formatJson(versionB.payload)
@@ -125,10 +128,11 @@ export default function UnifiedDiff({ versionA, versionB, className = '', hideUn
   return (
     <div className={`bg-card border border-border rounded-lg overflow-hidden font-mono text-sm ${className}`}>
       {/* Header */}
-      <div className="bg-muted border-b border-border px-4 py-2">
+      <div className="bg-muted border-b border-border px-4 py-2 flex items-center justify-between">
         <div className="text-sm font-medium text-foreground">
           {versionA.label} → {versionB.label}
         </div>
+        <CopyButton versionA={versionA} versionB={versionB} />
       </div>
 
       {/* Content */}
@@ -148,12 +152,12 @@ export default function UnifiedDiff({ versionA, versionB, className = '', hideUn
           return (
             <div
               key={index}
-              className={`flex px-2 py-1 min-h-[1.2rem] ${
+              className={`flex px-2 py-1 min-h-[1.2rem] border-l-4 ${
                 line.type === 'removed' 
-                              ? 'bg-diff-removed-bg text-diff-removed-text border-l-4 border-diff-removed'
+                              ? 'bg-diff-removed-bg text-diff-removed-text border-diff-removed'
             : line.type === 'added'
-            ? 'bg-diff-added-bg text-diff-added-text border-l-4 border-diff-added'
-                    : 'bg-card text-foreground'
+            ? 'bg-diff-added-bg text-diff-added-text border-diff-added'
+                    : 'bg-card text-foreground border-card'
               }`}
             >
               {/* Prefix */}

@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { JsonVersion } from '@/types/domain'
+import CopyButton from './CopyButton'
 
 interface SideBySideDiffProps {
   versionA: JsonVersion
@@ -18,6 +19,8 @@ export default function SideBySideDiff({ versionA, versionB, className = '', hid
       return 'Invalid JSON'
     }
   }
+
+
 
   const jsonA = formatJson(versionA.payload)
   const jsonB = formatJson(versionB.payload)
@@ -134,13 +137,16 @@ export default function SideBySideDiff({ versionA, versionB, className = '', hid
   return (
     <div className={`bg-card border border-border rounded-lg overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="bg-muted border-b border-border px-4 py-2 flex">
-        <div className="flex-1 text-sm font-medium text-foreground">
-          {versionA.label}
+      <div className="bg-muted border-b border-border px-4 py-2 flex items-center justify-between">
+        <div className="flex flex-1">
+          <div className="flex-1 text-sm font-medium text-foreground">
+            {versionA.label}
+          </div>
+          <div className="flex-1 text-sm font-medium text-foreground border-l border-border pl-4">
+            {versionB.label}
+          </div>
         </div>
-        <div className="flex-1 text-sm font-medium text-foreground border-l border-border pl-4">
-          {versionB.label}
-        </div>
+        <CopyButton versionA={versionA} versionB={versionB} />
       </div>
 
       {/* Content */}
@@ -162,12 +168,12 @@ export default function SideBySideDiff({ versionA, versionB, className = '', hid
           return (
             <div key={index} className="flex min-h-[1.2rem]">
               {/* Left side - Original */}
-              <div className={`flex-1 border-r border-border px-2 py-1 flex ${
+              <div className={`flex-1 border-r px-2 py-1 flex border-l-4 ${
                 line.type === 'removed' 
-                  ? 'bg-diff-removed-bg text-diff-removed-text border-l-4 border-diff-removed' 
+                  ? 'bg-diff-removed-bg text-diff-removed-text border-diff-removed' 
                   : line.type === 'modified'
-                    ? 'bg-diff-modified-bg text-diff-modified-text' 
-                    : 'bg-card text-foreground'
+                    ? 'bg-diff-modified-bg text-diff-modified-text border-diff-modified' 
+                    : 'bg-card text-foreground border-card'
               }`}>
                 <span className="text-muted-foreground mr-2 w-8 text-right flex-shrink-0">
                   {line.lineNumberA || ''}
@@ -176,12 +182,12 @@ export default function SideBySideDiff({ versionA, versionB, className = '', hid
               </div>
 
               {/* Right side - Modified */}
-              <div className={`flex-1 px-2 py-1 flex ${
+              <div className={`flex-1 px-2 py-1 flex border-l-4 ${
                 line.type === 'added' 
-                  ? 'bg-diff-added-bg text-diff-added-text border-l-4 border-diff-added' 
+                  ? 'bg-diff-added-bg text-diff-added-text border-diff-added' 
                   : line.type === 'modified'
-                    ? 'bg-diff-modified-bg text-diff-modified-text' 
-                    : 'bg-card text-foreground'
+                    ? 'bg-diff-modified-bg text-diff-modified-text border-diff-modified' 
+                    : 'bg-card text-foreground border-card'
               }`}>
                 <span className="text-muted-foreground mr-2 w-8 text-right flex-shrink-0">
                   {line.lineNumberB || ''}
