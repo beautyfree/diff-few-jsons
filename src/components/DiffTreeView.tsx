@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useCallback, useMemo, useRef } from 'react'
+import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAppStore, useAppSelectors } from '@/state/store'
 import type { DiffNode, ChangeKind } from '@/types/domain'
@@ -253,11 +253,72 @@ function TreeNode({ node, level, path, isExpanded, onToggle, hideUnchanged }: Tr
 
 function DiffTreeView({ className = '' }: DiffTreeViewProps) {
   const currentDiff = useAppSelectors.useCurrentDiff()
-  const { setHideUnchanged } = useAppStore()
+  const { versions, setHideUnchanged, setDiffResult } = useAppStore()
+  const activePair = useAppSelectors.useActivePair()
+  const optionsKey = useAppSelectors.useOptionsKey()
+  const enabledRules = useAppSelectors.useEnabledRules()
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set())
   const [hideUnchanged, setHideUnchangedLocal] = useState(false)
   const [announceMessage, setAnnounceMessage] = useState('')
+  const [isComputing, setIsComputing] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  // Auto-compute diff when selection changes
+  useEffect(() => {
+    if (!activePair || isComputing || currentDiff) {
+      return
+    }
+
+    const { a, b } = activePair
+    
+    // Find the actual version objects
+    const versionA = versions.find(v => v.id === a)
+    const versionB = versions.find(v => v.id === b)
+    
+    if (!versionA || !versionB) {
+      return
+    }
+
+    // Start computing
+    setIsComputing(true)
+
+    const computeDiff = async () => {
+      try {
+        // Import computeJsonDiff dynamically to avoid SSR issues
+        const { computeJsonDiff } = await import('@/engine/diff')
+        
+        // Prepare options with enabled rules
+        const options = {
+          arrayStrategy: 'index' as const,
+          arrayKeyPath: undefined,
+          ignoreRules: enabledRules.ignoreRules,
+          transformRules: enabledRules.transformRules
+        }
+
+        // Compute the diff
+        const result = computeJsonDiff(versionA.payload, versionB.payload, options)
+
+        // Create the full diff result
+        const diffResult = {
+          versionA: a,
+          versionB: b,
+          optionsKey,
+          root: result.root,
+          stats: result.stats
+        }
+
+        // Store in cache
+        setDiffResult(a, b, diffResult)
+
+      } catch (error) {
+        console.error('Failed to compute diff:', error)
+      } finally {
+        setIsComputing(false)
+      }
+    }
+
+    computeDiff()
+  }, [activePair, versions, optionsKey, currentDiff, enabledRules, setDiffResult, isComputing])
 
   const handleToggleNode = useCallback((path: string) => {
     setExpandedNodes(prev => {
@@ -322,6 +383,16 @@ function DiffTreeView({ className = '' }: DiffTreeViewProps) {
   })
 
   const expandedNodesSet = useMemo(() => expandedNodes, [expandedNodes])
+
+  if (isComputing) {
+    return (
+      <div className={`bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center ${className}`}>
+        <p className="text-gray-500">
+          Computing diff...
+        </p>
+      </div>
+    )
+  }
 
   if (!currentDiff) {
     return (

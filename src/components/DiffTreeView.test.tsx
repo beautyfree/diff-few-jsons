@@ -7,10 +7,16 @@ import type { DiffNode, DiffResult } from '@/types/domain'
 // Mock the store
 const mockSetHideUnchanged = vi.fn()
 const mockUseCurrentDiff = vi.fn()
+const mockUseActivePair = vi.fn()
+const mockUseOptionsKey = vi.fn()
+const mockUseEnabledRules = vi.fn()
 vi.mock('@/state/store', () => ({
   useAppStore: vi.fn(),
   useAppSelectors: {
-    useCurrentDiff: () => mockUseCurrentDiff()
+    useCurrentDiff: () => mockUseCurrentDiff(),
+    useActivePair: () => mockUseActivePair(),
+    useOptionsKey: () => mockUseOptionsKey(),
+    useEnabledRules: () => mockUseEnabledRules()
   }
 }))
 
@@ -76,11 +82,19 @@ describe('DiffTreeView', () => {
     
     // Mock the store with default values
     ;(useAppStore as any).mockReturnValue({
-      setHideUnchanged: mockSetHideUnchanged
+      versions: [],
+      setHideUnchanged: mockSetHideUnchanged,
+      setDiffResult: vi.fn()
     })
 
-    // Mock the selector
+    // Mock the selectors
     mockUseCurrentDiff.mockReturnValue(mockDiffResult)
+    mockUseActivePair.mockReturnValue(null)
+    mockUseOptionsKey.mockReturnValue('test-key')
+    mockUseEnabledRules.mockReturnValue({
+      ignoreRules: [],
+      transformRules: []
+    })
   })
 
   describe('Component Rendering', () => {

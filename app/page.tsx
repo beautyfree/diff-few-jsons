@@ -66,11 +66,11 @@ export default function HomePage() {
           </div>
         }>
           <div className="grid gap-6">
-            {/* Privacy & Consent */}
-            <div className="bg-card border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">Privacy & Security</h2>
-              <Consent />
-            </div>
+              {/* Privacy & Consent */}
+              <div className="bg-card border rounded-lg p-6">
+                <h2 className="text-xl font-semibold mb-4">Privacy & Security</h2>
+                <Consent />
+              </div>
 
             {/* SessionBar */}
             <div className="bg-card border rounded-lg p-6">

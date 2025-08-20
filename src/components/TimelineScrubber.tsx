@@ -3,7 +3,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAppStore, useAppSelectors } from '@/state/store'
-import type { JsonVersion } from '@/types/domain'
 import { 
   slideVariants, 
   buttonHoverVariants,
@@ -24,8 +23,19 @@ function TimelineScrubber({ className = '' }: TimelineScrubberProps) {
   const playIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const timelineRef = useRef<HTMLDivElement>(null)
 
-  // Get current timeline index
-  const currentIndex = selection.mode === 'timeline' ? selection.index : 0
+  // Get current timeline index with validation
+  const currentIndex = (() => {
+    if (selection.mode === 'timeline') {
+      const index = selection.index
+      // Validate the index is a number and within bounds
+      if (typeof index === 'number' && !isNaN(index) && index >= 0 && index < versions.length) {
+        return index
+      }
+      // If invalid, default to 0
+      return 0
+    }
+    return 0
+  })()
 
   // Format timestamp for display
   const formatTimestamp = useCallback((timestamp: string) => {
@@ -50,19 +60,18 @@ function TimelineScrubber({ className = '' }: TimelineScrubberProps) {
       
       setIsPlaying(true)
       playIntervalRef.current = setInterval(() => {
-        setTimelineIndex((prevIndex) => {
-          const nextIndex = prevIndex + 1
-          if (nextIndex >= versions.length - 1) {
-            // Reached the end, stop playing
-            setIsPlaying(false)
-            if (playIntervalRef.current) {
-              clearInterval(playIntervalRef.current)
-              playIntervalRef.current = null
-            }
-            return versions.length - 1
+        const nextIndex = currentIndex + 1
+        if (nextIndex >= versions.length - 1) {
+          // Reached the end, stop playing
+          setIsPlaying(false)
+          if (playIntervalRef.current) {
+            clearInterval(playIntervalRef.current)
+            playIntervalRef.current = null
           }
-          return nextIndex
-        })
+          setTimelineIndex(versions.length - 1)
+        } else {
+          setTimelineIndex(nextIndex)
+        }
       }, playSpeed)
     }
   }, [isPlaying, versions.length, playSpeed, setTimelineIndex])
@@ -177,11 +186,11 @@ function TimelineScrubber({ className = '' }: TimelineScrubberProps) {
 
           <div className="text-sm text-gray-600">
             <span className="font-medium">
-              {currentIndex + 1} of {versions.length}
+              {Math.max(1, currentIndex + 1)} of {Math.max(1, versions.length)}
             </span>
             {activePair && (
               <span className="ml-2 text-gray-500">
-                (comparing versions {currentIndex + 1} → {currentIndex + 2})
+                (comparing versions {Math.max(1, currentIndex + 1)} → {Math.max(1, currentIndex + 2)})
               </span>
             )}
           </div>

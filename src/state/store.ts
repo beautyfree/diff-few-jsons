@@ -314,13 +314,22 @@ export const useAppSelectors = {
     }
     
     const index = state.selection.index
-    if (index >= state.versions.length - 1) {
+    // Check if we have enough versions and the index is valid
+    if (state.versions.length < 2 || index < 0 || index >= state.versions.length - 1) {
+      return null
+    }
+    
+    const versionA = state.versions[index]
+    const versionB = state.versions[index + 1]
+    
+    // Additional safety check
+    if (!versionA || !versionB) {
       return null
     }
     
     return {
-      a: state.versions[index].id,
-      b: state.versions[index + 1].id
+      a: versionA.id,
+      b: versionB.id
     }
   }),
 
@@ -329,11 +338,23 @@ export const useAppSelectors = {
 
   // Get the current diff result for the active pair
   useCurrentDiff: () => useAppStore(state => {
-    const activePair = state.selection.mode === 'pair'
-      ? { a: state.selection.a, b: state.selection.b }
-      : state.selection.index < state.versions.length - 1
-      ? { a: state.versions[state.selection.index].id, b: state.versions[state.selection.index + 1].id }
-      : null
+    let activePair: { a: VersionId; b: VersionId } | null = null
+    
+    if (state.selection.mode === 'pair') {
+      activePair = { a: state.selection.a, b: state.selection.b }
+    } else {
+      const index = state.selection.index
+      // Check if we have enough versions and the index is valid
+      if (state.versions.length >= 2 && index >= 0 && index < state.versions.length - 1) {
+        const versionA = state.versions[index]
+        const versionB = state.versions[index + 1]
+        
+        // Additional safety check
+        if (versionA && versionB) {
+          activePair = { a: versionA.id, b: versionB.id }
+        }
+      }
+    }
 
     if (!activePair) return null
 
