@@ -20,10 +20,119 @@ export default function SequentialDiffs() {
       }))
     : []
 
-  const copyToClipboard = async (jsonA: any, jsonB: any, index: number) => {
+  const generateGitDiff = (versionA: any, versionB: any, labelA: string, labelB: string) => {
+    const jsonA = JSON.stringify(versionA, null, 2)
+    const jsonB = JSON.stringify(versionB, null, 2)
+    
+    const linesA = jsonA.split('\n')
+    const linesB = jsonB.split('\n')
+    
+    // Generate random commit-like hashes
+    const hashA = Math.random().toString(36).substr(2, 8)
+    const hashB = Math.random().toString(36).substr(2, 8)
+    
+    const diffLines = [
+      `diff --git a/${labelA}.json b/${labelB}.json`,
+      `index ${hashA}..${hashB} 100644`,
+      `--- a/${labelA}.json`,
+      `+++ b/${labelB}.json`
+    ]
+    
+    // Find chunks of changes
+    const chunks: Array<{
+      startA: number
+      countA: number
+      startB: number
+      countB: number
+      lines: string[]
+    }> = []
+    
+    let currentChunk: typeof chunks[0] | null = null
+    const maxLines = Math.max(linesA.length, linesB.length)
+    
+    for (let i = 0; i < maxLines; i++) {
+      const lineA = linesA[i]
+      const lineB = linesB[i]
+      
+      if (lineA === lineB && lineA !== undefined) {
+        // Unchanged line
+        if (currentChunk) {
+          // Add context line to current chunk
+          currentChunk.lines.push(` ${lineA}`)
+        }
+      } else {
+        // Different lines - start new chunk if needed
+        if (!currentChunk) {
+          currentChunk = {
+            startA: Math.max(0, i - 2), // Include some context
+            countA: 0,
+            startB: Math.max(0, i - 2),
+            countB: 0,
+            lines: []
+          }
+          
+          // Add context lines before the change
+          for (let j = Math.max(0, i - 2); j < i; j++) {
+            if (linesA[j] !== undefined) {
+              currentChunk.lines.push(` ${linesA[j]}`)
+              currentChunk.countA++
+              currentChunk.countB++
+            }
+          }
+        }
+        
+        // Add changed lines
+        if (lineA !== undefined) {
+          currentChunk.lines.push(`-${lineA}`)
+          currentChunk.countA++
+        }
+        if (lineB !== undefined) {
+          currentChunk.lines.push(`+${lineB}`)
+          currentChunk.countB++
+        }
+        
+        // Check if we should close this chunk
+        const nextUnchangedCount = (() => {
+          let count = 0
+          for (let j = i + 1; j < maxLines && count < 6; j++) {
+            if (linesA[j] === linesB[j] && linesA[j] !== undefined) {
+              count++
+            } else {
+              break
+            }
+          }
+          return count
+        })()
+        
+        if (nextUnchangedCount >= 6 || i === maxLines - 1) {
+          // Add a few context lines after the change
+          for (let j = i + 1; j < Math.min(maxLines, i + 4); j++) {
+            if (linesA[j] === linesB[j] && linesA[j] !== undefined) {
+              currentChunk.lines.push(` ${linesA[j]}`)
+              currentChunk.countA++
+              currentChunk.countB++
+            }
+          }
+          
+          chunks.push(currentChunk)
+          currentChunk = null
+        }
+      }
+    }
+    
+    // Generate chunk headers and content
+    chunks.forEach(chunk => {
+      diffLines.push(`@@ -${chunk.startA + 1},${chunk.countA} +${chunk.startB + 1},${chunk.countB} @@`)
+      diffLines.push(...chunk.lines)
+    })
+    
+    return diffLines.join('\n')
+  }
+
+  const copyToClipboard = async (versionA: any, versionB: any, labelA: string, labelB: string, index: number) => {
     try {
-      const diffText = JSON.stringify(jsonA, null, 2) + '\n\n---\n\n' + JSON.stringify(jsonB, null, 2)
-      await navigator.clipboard.writeText(diffText)
+      const gitDiff = generateGitDiff(versionA.payload, versionB.payload, labelA, labelB)
+      await navigator.clipboard.writeText(gitDiff)
       setCopiedIndex(index)
       setTimeout(() => setCopiedIndex(null), 2000)
     } catch (error) {
@@ -93,7 +202,7 @@ export default function SequentialDiffs() {
             </h3>
             <div className="flex items-center gap-2">
               <button
-                onClick={() => copyToClipboard(pair.versionA.payload, pair.versionB.payload, index)}
+                onClick={() => copyToClipboard(pair.versionA, pair.versionB, pair.versionA.label, pair.versionB.label, index)}
                 className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
               >
                 {copiedIndex === index ? (
@@ -104,7 +213,7 @@ export default function SequentialDiffs() {
                 ) : (
                   <>
                     <Copy className="w-4 h-4" />
-                    Copy JSONs
+                    Copy Git Diff
                   </>
                 )}
               </button>
