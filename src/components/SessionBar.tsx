@@ -220,8 +220,8 @@ function SessionBar({ className = '' }: SessionBarProps) {
       {/* Main Controls */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <Settings className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-          <span className="text-lg font-semibold text-gray-900 dark:text-white">Session</span>
+          <Settings className="w-5 h-5 text-muted-foreground" />
+          <span className="text-lg font-semibold text-foreground">Session</span>
         </div>
 
         <div className="flex items-center space-x-2">
@@ -282,7 +282,7 @@ function SessionBar({ className = '' }: SessionBarProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={toggleTheme}
-            className="flex items-center space-x-1 px-3 py-2 text-sm rounded-md transition-all duration-300 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="flex items-center space-x-1 px-3 py-2 text-sm rounded-md transition-all duration-300 bg-secondary text-secondary-foreground hover:bg-accent"
             title={`Switch to ${store.ui.theme === 'light' ? 'dark' : 'light'} theme`}
           >
             <motion.div

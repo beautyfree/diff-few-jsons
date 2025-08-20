@@ -6,6 +6,62 @@
   --theme-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* CSS Variables for colors - Light theme */
+:root {
+  /* Background colors */
+  --color-background: 255 255 255;
+  --color-card: 255 255 255;
+  --color-card-foreground: 29 29 31;
+  --color-muted: 245 245 247;
+  
+  /* Text colors */
+  --color-foreground: 29 29 31;
+  --color-muted-foreground: 134 134 139;
+  
+  /* Border colors */
+  --color-border: 210 210 215;
+  
+  /* Primary colors */
+  --color-primary: 0 113 227;
+  --color-primary-foreground: 255 255 255;
+  
+  /* Secondary colors */
+  --color-secondary: 245 245 247;
+  --color-secondary-foreground: 29 29 31;
+  
+  /* Accent colors */
+  --color-accent: 245 245 247;
+  --color-accent-foreground: 29 29 31;
+}
+
+/* Dark theme colors */
+.dark {
+  /* Background colors */
+  --color-background: 0 0 0;
+  --color-card: 28 28 30;
+  --color-card-foreground: 255 255 255;
+  --color-muted: 44 44 46;
+  
+  /* Text colors */
+  --color-foreground: 255 255 255;
+  --color-muted-foreground: 142 142 147;
+  
+  /* Border colors */
+  --color-border: 56 56 58;
+  
+  /* Primary colors */
+  --color-primary: 0 122 255;
+  --color-primary-foreground: 255 255 255;
+  
+  /* Secondary colors */
+  --color-secondary: 44 44 46;
+  --color-secondary-foreground: 255 255 255;
+  
+  /* Accent colors */
+  --color-accent: 44 44 46;
+  --color-accent-foreground: 255 255 255;
+}
+
 /* Apply theme colors with smooth transitions */
 * {
   transition: 
@@ -16,7 +72,7 @@
 
 /* Base elements */
 body {
-  @apply bg-white dark:bg-black text-gray-900 dark:text-white;
+  @apply bg-background text-foreground;
 }
 
 /* Animation classes for theme transitions */

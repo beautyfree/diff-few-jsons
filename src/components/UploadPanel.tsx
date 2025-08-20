@@ -260,10 +260,10 @@ function UploadPanel() {
   }, [handleFileUpload])
 
   return (
-    <div className="space-y-6 p-6 bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+    <div className="space-y-6 p-6 bg-card rounded-lg shadow-sm border border-border">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Upload JSON</h2>
-        <span className="text-sm text-gray-600 dark:text-gray-300">
+        <h2 className="text-xl font-semibold text-foreground">Upload JSON</h2>
+        <span className="text-sm text-muted-foreground">
           {versions.length} version{versions.length !== 1 ? 's' : ''} loaded
         </span>
       </div>
@@ -316,7 +316,7 @@ function UploadPanel() {
 
       {/* Paste Zone */}
       <div className="space-y-3">
-        <label className="block text-sm font-medium text-gray-900 dark:text-white">
+        <label className="block text-sm font-medium text-foreground">
           Paste JSON
         </label>
         <div className="flex space-x-2">
@@ -324,7 +324,7 @@ function UploadPanel() {
             value={pasteText}
             onChange={(e) => setPasteText(e.target.value)}
             placeholder="Paste your JSON here..."
-            className="flex-1 min-h-[100px] px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            className="flex-1 min-h-[100px] px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-none bg-card text-foreground"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
                 handlePasteSubmit()
@@ -334,7 +334,7 @@ function UploadPanel() {
           <button
             onClick={handlePasteSubmit}
             disabled={!pasteText.trim()}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Add
           </button>
@@ -343,7 +343,7 @@ function UploadPanel() {
 
       {/* File Upload Zone */}
       <div className="space-y-3">
-        <label className="block text-sm font-medium text-gray-900 dark:text-white">
+        <label className="block text-sm font-medium text-foreground">
           Upload Files
         </label>
         <div
@@ -352,25 +352,25 @@ function UploadPanel() {
           onDrop={handleDrop}
           className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
             isDragOver
-              ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20'
-              : 'border-gray-300 dark:border-gray-600 hover:border-blue-400'
+              ? 'border-primary bg-primary/10'
+              : 'border-border hover:border-primary'
           }`}
         >
-                      <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                      <svg className="mx-auto h-12 w-12 text-muted-foreground" stroke="currentColor" fill="none" viewBox="0 0 48 48">
             <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <div className="mt-4">
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/20 hover:bg-blue-200 dark:hover:bg-blue-900/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary bg-primary/10 hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
             >
               Select files
             </button>
-                          <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                          <p className="mt-2 text-sm text-muted-foreground">
                 or drag and drop JSON files here
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
               Maximum file size: 10MB
             </p>
           </div>
@@ -387,7 +387,7 @@ function UploadPanel() {
 
       {/* URL Input */}
       <div className="space-y-3">
-        <label className="block text-sm font-medium text-gray-900 dark:text-white">
+        <label className="block text-sm font-medium text-foreground">
           Fetch from URL
         </label>
         <div className="flex space-x-2">
@@ -396,7 +396,7 @@ function UploadPanel() {
             value={urlInput}
             onChange={(e) => setUrlInput(e.target.value)}
             placeholder="https://example.com/api/data.json"
-            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            className="flex-1 px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary bg-card text-foreground"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 handleUrlFetch()
@@ -426,7 +426,7 @@ function UploadPanel() {
       {/* Status Indicators */}
       {statuses.length > 0 && (
         <div className="space-y-2">
-          <h3 className="text-sm font-medium text-gray-900 dark:text-white">Recent Uploads</h3>
+          <h3 className="text-sm font-medium text-foreground">Recent Uploads</h3>
           <div className="space-y-1">
             {statuses.slice(-5).map(status => (
               <div key={status.id} className="flex items-center text-sm">
@@ -435,7 +435,7 @@ function UploadPanel() {
                   status.status === 'success' ? 'bg-green-400' :
                   'bg-red-400'
                 }`} />
-                <span className="text-gray-600 dark:text-gray-300">
+                <span className="text-muted-foreground">
                   {status.status === 'loading' && 'Processing...'}
                   {status.status === 'success' && 'Upload successful'}
                   {status.status === 'error' && 'Upload failed'}
