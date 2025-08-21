@@ -49,6 +49,35 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  // Check for saved theme preference or default to system preference
+                  var theme = localStorage.getItem('diff-few-jsons-theme');
+                  if (!theme) {
+                    // Use system preference
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  }
+                  
+                  // Apply theme immediately to prevent flash
+                  if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {
+                  // Fallback to system preference if localStorage fails
+                  var systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  if (systemTheme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  }
+                }
+              })();
+            `
+          }}
+        />
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
