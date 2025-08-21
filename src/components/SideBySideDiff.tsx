@@ -37,51 +37,129 @@ export default function SideBySideDiff({ versionA, versionB, className = '', hid
     lineNumberB?: number
   }> = []
 
-  let lineNumberA = 1
-  let lineNumberB = 1
-
-  // Simple line-by-line comparison
-  const maxLines = Math.max(linesA.length, linesB.length)
+  // Smart comparison that matches fields and sorts first JSON under second
+  const processedA = new Set<number>()
+  const processedB = new Set<number>()
   
-  for (let i = 0; i < maxLines; i++) {
-    const lineA = linesA[i] || null
-    const lineB = linesB[i] || null
+  // Helper function to extract field name from JSON line
+  const getFieldName = (line: string): string | null => {
+    const match = line.match(/^\s*"([^"]+)"\s*:/)
+    return match ? match[1] : null
+  }
+  
+  // First pass: find exact matches and track their positions
+  const matches: Array<{a: number, b: number}> = []
+  
+  for (let i = 0; i < linesA.length; i++) {
+    for (let j = 0; j < linesB.length; j++) {
+      if (!processedA.has(i) && !processedB.has(j) && linesA[i] === linesB[j]) {
+        matches.push({a: i, b: j})
+        processedA.add(i)
+        processedB.add(j)
+      }
+    }
+  }
+  
+  // Second pass: find modified fields (same field name, different value)
+  const modifiedFields: Array<{a: number, b: number}> = []
+  
+  for (let i = 0; i < linesA.length; i++) {
+    if (processedA.has(i)) continue
     
-    if (lineA === lineB) {
-      // Same line
+    const fieldNameA = getFieldName(linesA[i])
+    if (!fieldNameA) continue
+    
+    for (let j = 0; j < linesB.length; j++) {
+      if (processedB.has(j)) continue
+      
+      const fieldNameB = getFieldName(linesB[j])
+      if (fieldNameB === fieldNameA) {
+        // Same field name, different value - this is a modification
+        modifiedFields.push({a: i, b: j})
+        processedA.add(i)
+        processedB.add(j)
+        break
+      }
+    }
+  }
+  
+  // Sort matches by position in second file (B) to maintain order
+  matches.sort((a, b) => a.b - b.b)
+  modifiedFields.sort((a, b) => a.b - b.b)
+  
+  // Combine all matches and sort by position in second file
+  const allMatches = [...matches, ...modifiedFields].sort((a, b) => a.b - b.b)
+  
+  // Build unified lines based on matches
+  let currentA = 0
+  let currentB = 0
+  
+  for (const match of allMatches) {
+    // Add any unmatched lines from A before this match
+    while (currentA < match.a) {
+      if (!processedA.has(currentA)) {
+        unifiedLines.push({
+          lineA: linesA[currentA],
+          lineB: null,
+          type: 'removed',
+          lineNumberA: currentA + 1
+        })
+      }
+      currentA++
+    }
+    
+    // Add any unmatched lines from B before this match
+    while (currentB < match.b) {
+      if (!processedB.has(currentB)) {
+        unifiedLines.push({
+          lineA: null,
+          lineB: linesB[currentB],
+          type: 'added',
+          lineNumberB: currentB + 1
+        })
+      }
+      currentB++
+    }
+    
+    // Check if this is a modification or exact match
+    const isModification = modifiedFields.some(m => m.a === match.a && m.b === match.b)
+    
+    // Add the matched line
+    unifiedLines.push({
+      lineA: linesA[match.a],
+      lineB: linesB[match.b],
+      type: isModification ? 'removed' : 'unchanged',
+      lineNumberA: match.a + 1,
+      lineNumberB: match.b + 1
+    })
+    
+    currentA = match.a + 1
+    currentB = match.b + 1
+  }
+  
+  // Add remaining unmatched lines
+  while (currentA < linesA.length) {
+    if (!processedA.has(currentA)) {
       unifiedLines.push({
-        lineA,
-        lineB,
-        type: 'unchanged',
-        lineNumberA: lineNumberA++,
-        lineNumberB: lineNumberB++
-      })
-    } else if (lineA === null) {
-      // Added line
-      unifiedLines.push({
-        lineA: null,
-        lineB,
-        type: 'added',
-        lineNumberB: lineNumberB++
-      })
-    } else if (lineB === null) {
-      // Removed line
-      unifiedLines.push({
-        lineA,
+        lineA: linesA[currentA],
         lineB: null,
         type: 'removed',
-        lineNumberA: lineNumberA++
-      })
-    } else {
-      // Modified line - show as removed on left, added on right
-      unifiedLines.push({
-        lineA,
-        lineB,
-        type: 'removed',
-        lineNumberA: lineNumberA++,
-        lineNumberB: lineNumberB++
+        lineNumberA: currentA + 1
       })
     }
+    currentA++
+  }
+  
+  while (currentB < linesB.length) {
+    if (!processedB.has(currentB)) {
+      unifiedLines.push({
+        lineA: null,
+        lineB: linesB[currentB],
+        type: 'added',
+        lineNumberB: currentB + 1
+      })
+    }
+    currentB++
   }
 
   // Group unchanged lines and add context separators (same logic as UnifiedDiff)
