@@ -21,7 +21,8 @@ const initialState: AppState = {
   versions: [],
   ui: {
     theme: 'dark',
-    hideUnchanged: false,
+    hideUnchanged: true,
+    diffViewMode: 'unified',
     notifications: []
   }
 }
@@ -38,6 +39,8 @@ export const useAppStore = create<AppState & {
   
   // UI state management
   setTheme: (theme: 'light' | 'dark') => void;
+  setHideUnchanged: (hideUnchanged: boolean) => void;
+  setDiffViewMode: (mode: 'side-by-side' | 'unified') => void;
   
   // Notification management
   showNotification: (type: Notification['type'], message: string, duration?: number) => void;
@@ -89,6 +92,14 @@ export const useAppStore = create<AppState & {
     // UI state management
     setTheme: (theme: 'light' | 'dark') => {
       set(state => ({ ui: { ...state.ui, theme } }))
+    },
+
+    setHideUnchanged: (hideUnchanged: boolean) => {
+      set(state => ({ ui: { ...state.ui, hideUnchanged } }))
+    },
+
+    setDiffViewMode: (mode: 'side-by-side' | 'unified') => {
+      set(state => ({ ui: { ...state.ui, diffViewMode: mode } }))
     },
 
     // Notification management

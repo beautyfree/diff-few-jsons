@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useAppStore } from '@/state/store'
 import { Eye, Split, TrendingUp } from 'lucide-react'
 import SideBySideDiff from './SideBySideDiff'
@@ -12,9 +12,8 @@ interface SequentialDiffsProps {
 }
 
 export default function SequentialDiffs({ className = '' }: SequentialDiffsProps) {
-  const { versions } = useAppStore()
-  const [viewMode, setViewMode] = useState<'side-by-side' | 'unified'>('unified')
-  const [hideUnchanged, setHideUnchanged] = useState(true)
+  const { versions, ui, setDiffViewMode, setHideUnchanged } = useAppStore()
+  const { diffViewMode, hideUnchanged } = ui
 
   // Generate sequential pairs
   const sequentialPairs = useMemo(() => 
@@ -71,9 +70,9 @@ export default function SequentialDiffs({ className = '' }: SequentialDiffsProps
                 <span className="text-sm font-medium text-foreground">View:</span>
                 <div className="flex bg-background rounded-lg p-1 border border-border/50">
                   <button
-                    onClick={() => setViewMode('side-by-side')}
+                    onClick={() => setDiffViewMode('side-by-side')}
                     className={`flex items-center gap-2 px-3 py-1.5 text-sm rounded-md transition-all duration-200 ${
-                      viewMode === 'side-by-side'
+                      diffViewMode === 'side-by-side'
                         ? 'bg-primary text-primary-foreground shadow-sm'
                         : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                     }`}
@@ -82,9 +81,9 @@ export default function SequentialDiffs({ className = '' }: SequentialDiffsProps
                     Side by Side
                   </button>
                   <button
-                    onClick={() => setViewMode('unified')}
+                    onClick={() => setDiffViewMode('unified')}
                     className={`flex items-center gap-2 px-3 py-1.5 text-sm rounded-md transition-all duration-200 ${
-                      viewMode === 'unified'
+                      diffViewMode === 'unified'
                         ? 'bg-primary text-primary-foreground shadow-sm'
                         : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                     }`}
@@ -131,7 +130,7 @@ export default function SequentialDiffs({ className = '' }: SequentialDiffsProps
                 transition={{ delay: index * 0.1 }}
               >
                 <div className="bg-background/50 rounded-xl border border-border/50 overflow-hidden shadow-sm">
-                  {viewMode === 'side-by-side' ? (
+                  {diffViewMode === 'side-by-side' ? (
                     <SideBySideDiff 
                       versionA={pair.versionA} 
                       versionB={pair.versionB}

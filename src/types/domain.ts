@@ -55,6 +55,8 @@ export interface UIState {
   theme: 'light' | 'dark';
   /** Whether to hide unchanged nodes in the diff tree */
   hideUnchanged: boolean;
+  /** Selected diff view mode */
+  diffViewMode: 'side-by-side' | 'unified';
   /** Active notifications */
   notifications: Notification[];
 }
