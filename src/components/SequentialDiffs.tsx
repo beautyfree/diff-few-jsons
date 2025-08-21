@@ -5,6 +5,7 @@ import { useAppStore } from '@/state/store'
 import { Eye, Split, TrendingUp } from 'lucide-react'
 import SideBySideDiff from './SideBySideDiff'
 import UnifiedDiff from './UnifiedDiff'
+import CopyAllDiffsButton from './CopyAllDiffsButton'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface SequentialDiffsProps {
@@ -96,6 +97,7 @@ export default function SequentialDiffs({ className = '' }: SequentialDiffsProps
             </div>
             
             <div className="flex items-center gap-3">
+              <CopyAllDiffsButton versions={versions} />
               <label className="flex items-center gap-2 cursor-pointer group">
                 <div className="relative">
                   <input

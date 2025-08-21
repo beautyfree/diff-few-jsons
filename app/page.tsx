@@ -1,25 +1,31 @@
 import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
+import { 
+  UploadSkeleton, 
+  VersionListSkeleton, 
+  DiffSkeleton, 
+  SessionBarSkeleton 
+} from '@/components/Skeleton'
 
 // Dynamically import client components to avoid SSR issues
 const UploadPanel = dynamic(() => import('@/components/UploadPanel'), {
   ssr: false,
-  loading: () => <div className="text-muted-foreground">Loading upload panel...</div>
+  loading: () => <UploadSkeleton />
 })
 
 const VersionList = dynamic(() => import('@/components/VersionList'), {
   ssr: false,
-  loading: () => <div className="text-muted-foreground">Loading version list...</div>
+  loading: () => <VersionListSkeleton />
 })
 
 const SequentialDiffs = dynamic(() => import('@/components/SequentialDiffs'), {
   ssr: false,
-  loading: () => <div className="text-muted-foreground">Loading diffs...</div>
+  loading: () => <DiffSkeleton />
 })
 
 const SessionBar = dynamic(() => import('@/components/SessionBar'), {
   ssr: false,
-  loading: () => <div className="text-muted-foreground">Loading session controls...</div>
+  loading: () => <SessionBarSkeleton />
 })
 
 const NotificationContainer = dynamic(() => import('@/components/NotificationContainer'), {
@@ -48,8 +54,11 @@ export default function HomePage() {
         </header>
 
         <Suspense fallback={
-          <div className="flex items-center justify-center h-64">
-            <div className="text-muted-foreground">Loading...</div>
+          <div className="space-y-8 max-w-7xl mx-auto">
+            <SessionBarSkeleton />
+            <UploadSkeleton />
+            <VersionListSkeleton />
+            <DiffSkeleton />
           </div>
         }>
           <div className="grid gap-8 max-w-7xl mx-auto">
