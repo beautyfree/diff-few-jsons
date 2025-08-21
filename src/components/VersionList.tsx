@@ -102,12 +102,16 @@ function VersionList({ className = '' }: VersionListProps) {
   }, [])
 
   return (
-    <div className={`space-y-4 p-6 bg-card rounded-lg shadow-sm border border-border ${className}`}>
+    <div className={`space-y-6 p-8 bg-card rounded-xl shadow-lg border border-border/50 backdrop-blur-sm ${className}`}>
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-foreground">JSON Versions</h2>
-        <span className="text-sm text-muted-foreground">
-          {versions.length} version{versions.length !== 1 ? 's' : ''}
-        </span>
+        <div>
+          <h2 className="text-2xl font-bold text-foreground bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            JSON Versions
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            {versions.length} version{versions.length !== 1 ? 's' : ''} • Drag to reorder • Click to edit
+          </p>
+        </div>
       </div>
 
       {versions.length === 0 ? (

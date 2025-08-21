@@ -264,12 +264,16 @@ function UploadPanel({ className = '' }: UploadPanelProps) {
   }, [handleFileUpload])
 
   return (
-    <div className={`space-y-6 p-6 bg-card rounded-lg shadow-sm border border-border ${className}`}>
+    <div className={`space-y-8 p-8 bg-card rounded-xl shadow-lg border border-border/50 backdrop-blur-sm ${className}`}>
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-foreground">Upload JSON</h2>
-        <span className="text-sm text-muted-foreground">
-          {versions.length} version{versions.length !== 1 ? 's' : ''} loaded
-        </span>
+        <div>
+          <h2 className="text-2xl font-bold text-foreground bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            Upload JSON Files
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            {versions.length} version{versions.length !== 1 ? 's' : ''} loaded • Multiple upload methods available
+          </p>
+        </div>
       </div>
 
       {/* Error Toasts */}

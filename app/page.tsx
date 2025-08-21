@@ -24,14 +24,21 @@ const SessionBar = dynamic(() => import('@/components/SessionBar'), {
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="container mx-auto px-4 py-8">
-        <header className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
+        {/* Modern Hero Header */}
+        <header className="mb-12 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
             JSON Diff Timeline
+          </div>
+          <h1 className="text-5xl font-bold text-foreground mb-4 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent">
+            Track Changes Over Time
           </h1>
-          <p className="text-muted-foreground">
-            Visualize JSON differences over time with a modern, interactive timeline
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Visualize JSON differences with a modern, interactive timeline. Compare versions, track evolution, and understand your data changes at a glance.
           </p>
         </header>
 
@@ -40,7 +47,7 @@ export default function HomePage() {
             <div className="text-muted-foreground">Loading...</div>
           </div>
         }>
-                    <div className="grid gap-6">
+          <div className="grid gap-8 max-w-7xl mx-auto">
             {/* Session Management */}
             <SessionBar />
 

@@ -216,7 +216,19 @@ function SessionBar({ className = '' }: SessionBarProps) {
   }, [store.versions.length, createSession, isLocalStorageAvailable])
 
   return (
-    <div className={`relative p-6 bg-card rounded-lg shadow-sm border border-border ${className}`}>
+    <div className={`relative p-8 bg-card rounded-xl shadow-lg border border-border/50 backdrop-blur-sm ${className}`}>
+      {/* Modern Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="text-2xl font-bold text-foreground bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            Session Management
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            Save, load, and manage your comparison sessions
+          </p>
+        </div>
+      </div>
+
       {/* Main Controls */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
