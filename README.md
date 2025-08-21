@@ -1,25 +1,33 @@
 # JSON Diff Timeline
 
-A modern Next.js web application for visualizing JSON differences over time with an interactive timeline. Built with TypeScript, Tailwind CSS, and Framer Motion.
+A modern Next.js web application for comparing JSON files with side-by-side and unified diff views. Built with TypeScript, Tailwind CSS, and Framer Motion.
+
+## 🌐 Live Demo
+
+**Production URL**: https://diff-few-jsons.vercel.app
+
+**Latest Deployment**: https://diff-few-jsons-phsul4oad-alexey-elizarovs-projects.vercel.app
 
 ## Features
 
-- **Multi-JSON Ingestion**: Upload, paste, or fetch JSON files
-- **Timeline Visualization**: Scrub through versions to see changes evolve
-- **Diff Engine**: Accurate comparison of objects, arrays, and primitives
-- **Modern UI**: Beautiful interface with smooth animations
-- **Performance**: Web Workers for heavy computation, virtualization for large trees
+- **JSON File Comparison**: Upload, paste, or fetch JSON files for comparison
+- **Smart Diff Algorithm**: Intelligent field matching and alignment for reordered JSONs
+- **Multiple View Modes**: Side-by-side and unified diff views
+- **Modern UI**: Beautiful interface with smooth animations and dark/light themes
+- **Session Management**: Save and load comparison sessions
+- **Git-Style Output**: Copy diffs in git format
+- **Hide Unchanged**: Option to hide unchanged fields for cleaner view
 - **Privacy-First**: Local processing by default
 
 ## Tech Stack
 
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS
+- **Styling**: Tailwind CSS with CSS Variables for theming
 - **Animations**: Framer Motion
 - **State Management**: Zustand
-- **Testing**: Vitest, React Testing Library, Playwright
-- **Diff Engine**: jsondiffpatch + custom adapters
+- **Deployment**: Vercel
+- **Diff Engine**: Custom smart comparison algorithm
 
 ## Getting Started
 
@@ -63,6 +71,22 @@ npm run build
 
 # Start production server
 npm start
+
+## Deployment
+
+This project is deployed on Vercel. To deploy:
+
+1. Install Vercel CLI:
+   ```bash
+   npm i -g vercel
+   ```
+
+2. Deploy to production:
+   ```bash
+   vercel --prod
+   ```
+
+3. For custom domain setup, add DNS records as instructed by Vercel CLI.
 ```
 
 ## Project Structure
