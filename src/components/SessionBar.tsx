@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useCallback, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useAppStore } from '@/state/store'
 import type { Session } from '@/types/domain'
 import { 
@@ -11,29 +11,16 @@ import {
   FileText, 
   Sun, 
   Moon, 
-  Settings, 
-  AlertCircle, 
-  CheckCircle, 
-  X
+  AlertCircle,
+  Trash2
 } from 'lucide-react'
 
 interface SessionBarProps {
   className?: string
 }
 
-interface NotificationState {
-  show: boolean
-  type: 'success' | 'error'
-  message: string
-}
-
 function SessionBar({ className = '' }: SessionBarProps) {
   const store = useAppStore()
-  const [notification, setNotification] = useState<NotificationState>({
-    show: false,
-    type: 'success',
-    message: ''
-  })
   const [fileInputRef, setFileInputRef] = useState<HTMLInputElement | null>(null)
 
   // Check if localStorage is available
@@ -48,20 +35,15 @@ function SessionBar({ className = '' }: SessionBarProps) {
     }
   }, [])
 
-  // Show notification
-  const showNotification = useCallback((type: 'success' | 'error', message: string) => {
-    setNotification({ show: true, type, message })
-    setTimeout(() => {
-      setNotification(prev => ({ ...prev, show: false }))
-    }, 3000)
-  }, [])
+  // Show notification using store
+  const showNotification = useCallback((type: 'success' | 'error' | 'info' | 'warning', message: string) => {
+    store.showNotification(type, message)
+  }, [store])
 
   // Create session object from current state
   const createSession = useCallback((): Session => {
     return {
       versions: store.versions,
-      options: store.options,
-      selection: store.selection,
       ui: store.ui,
       meta: {
         createdAt: new Date().toISOString(),
@@ -69,7 +51,7 @@ function SessionBar({ className = '' }: SessionBarProps) {
         appVersion: '1.0.0'
       }
     }
-  }, [store.versions, store.options, store.selection, store.ui])
+  }, [store.versions, store.ui])
 
   // Save session to localStorage
   const saveToLocalStorage = useCallback(() => {
@@ -155,7 +137,7 @@ function SessionBar({ className = '' }: SessionBarProps) {
         const session: Session = JSON.parse(sessionData)
         
         // Validate session structure
-        if (!session.versions || !session.options || !session.ui) {
+        if (!session.versions || !session.ui) {
           throw new Error('Invalid session file format')
         }
         
@@ -190,6 +172,19 @@ function SessionBar({ className = '' }: SessionBarProps) {
     }
   }, [importSession, fileInputRef])
 
+  // Clear session
+  const clearSession = useCallback(() => {
+    if (store.versions.length === 0) {
+      showNotification('info', 'Session is already empty')
+      return
+    }
+
+    if (window.confirm('Are you sure you want to clear all versions? This action cannot be undone.')) {
+      store.reset()
+      showNotification('success', 'Session cleared successfully')
+    }
+  }, [store, showNotification])
+
   // Toggle theme
   const toggleTheme = useCallback(() => {
     const newTheme = store.ui.theme === 'light' ? 'dark' : 'light'
@@ -217,26 +212,21 @@ function SessionBar({ className = '' }: SessionBarProps) {
 
   return (
     <div className={`relative p-8 bg-card rounded-xl shadow-lg border border-border/50 backdrop-blur-sm ${className}`}>
-      {/* Modern Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-2xl font-bold text-foreground bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            Session Management
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            Save, load, and manage your comparison sessions
-          </p>
-        </div>
-      </div>
-
-      {/* Main Controls */}
+      {/* Compact Header with Controls */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Settings className="w-5 h-5 text-muted-foreground" />
-          <span className="text-lg font-semibold text-foreground">Session</span>
+        <div className="flex items-center gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-foreground bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              Session Management
+            </h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              Save, load, and manage your comparison sessions
+            </p>
+          </div>
         </div>
 
-        <div className="flex items-center space-x-2">
+        {/* Session Controls */}
+        <div className="flex items-center gap-2">
           {/* Save to localStorage */}
           {isLocalStorageAvailable() && (
             <motion.button
@@ -250,6 +240,32 @@ function SessionBar({ className = '' }: SessionBarProps) {
               <span>Save</span>
             </motion.button>
           )}
+
+          {/* Load from localStorage */}
+          {isLocalStorageAvailable() && (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={loadFromLocalStorage}
+              className="flex items-center space-x-1 px-3 py-2 text-sm bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors"
+              title="Load latest session from browser storage"
+            >
+              <FileText className="w-4 h-4" />
+              <span>Load</span>
+            </motion.button>
+          )}
+
+          {/* Clear Session */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={clearSession}
+            className="flex items-center space-x-1 px-3 py-2 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+            title="Clear all versions from session"
+          >
+            <Trash2 className="w-4 h-4" />
+            <span>Clear</span>
+          </motion.button>
 
           {/* Export Session */}
           <motion.button
@@ -275,21 +291,7 @@ function SessionBar({ className = '' }: SessionBarProps) {
             <span>Import</span>
           </motion.button>
 
-          {/* Load from localStorage */}
-          {isLocalStorageAvailable() && (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={loadFromLocalStorage}
-              className="flex items-center space-x-1 px-3 py-2 text-sm bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors"
-              title="Load latest session from browser storage"
-            >
-              <FileText className="w-4 h-4" />
-              <span>Load</span>
-            </motion.button>
-          )}
-
-          {/* Theme Toggle */}
+            {/* Theme Toggle */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -334,48 +336,6 @@ function SessionBar({ className = '' }: SessionBarProps) {
         className="hidden"
         aria-label="Import session file"
       />
-
-      {/* Notifications */}
-      <AnimatePresence>
-        {notification.show && (
-          <motion.div
-            initial={{ opacity: 0, y: -50, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -50, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="fixed top-4 right-4 z-50"
-          >
-            <div className={`flex items-start space-x-2 p-4 rounded-lg shadow-lg max-w-sm ${
-              notification.type === 'success' 
-                ? 'bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800' 
-                : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
-            }`}>
-              {notification.type === 'success' ? (
-                <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
-              ) : (
-                <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-              )}
-              <div className="flex-1">
-                <p className={`text-sm font-medium ${
-                  notification.type === 'success' ? 'text-emerald-800 dark:text-emerald-200' : 'text-red-800 dark:text-red-200'
-                }`}>
-                  {notification.message}
-                </p>
-              </div>
-              <button
-                onClick={() => setNotification(prev => ({ ...prev, show: false }))}
-                className={`p-1 rounded hover:bg-opacity-20 ${
-                  notification.type === 'success' 
-                    ? 'text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 dark:hover:bg-emerald-400' 
-                    : 'text-red-600 dark:text-red-400 hover:bg-red-600 dark:hover:bg-red-400'
-                }`}
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   )
 }

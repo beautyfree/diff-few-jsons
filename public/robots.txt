@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://diff-few-jsons.vercel.app/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1

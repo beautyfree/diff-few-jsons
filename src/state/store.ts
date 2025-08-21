@@ -3,7 +3,8 @@ import { subscribeWithSelector } from 'zustand/middleware'
 import { 
   AppState, 
   JsonVersion, 
-  VersionId
+  VersionId,
+  Notification
 } from '@/types/domain'
 
 /**
@@ -18,19 +19,10 @@ const generateVersionId = (): string => {
  */
 const initialState: AppState = {
   versions: [],
-  selection: { mode: 'timeline', index: 0 },
-  options: {
-    arrayStrategy: 'index',
-    arrayKeyPath: undefined,
-    ignoreRules: [],
-    transformRules: []
-  },
-  diffCache: {},
   ui: {
     theme: 'dark',
     hideUnchanged: false,
-    searchQuery: '',
-    rulesPanelExpanded: false
+    notifications: []
   }
 }
 
@@ -46,6 +38,11 @@ export const useAppStore = create<AppState & {
   
   // UI state management
   setTheme: (theme: 'light' | 'dark') => void;
+  
+  // Notification management
+  showNotification: (type: Notification['type'], message: string, duration?: number) => void;
+  removeNotification: (id: string) => void;
+  clearNotifications: () => void;
   
   // Reset state
   reset: () => void;
@@ -92,6 +89,54 @@ export const useAppStore = create<AppState & {
     // UI state management
     setTheme: (theme: 'light' | 'dark') => {
       set(state => ({ ui: { ...state.ui, theme } }))
+    },
+
+    // Notification management
+    showNotification: (type: Notification['type'], message: string, duration = 3000) => {
+      const notification: Notification = {
+        id: `notification_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        type,
+        message,
+        createdAt: Date.now(),
+        duration
+      }
+      
+      set(state => ({
+        ui: {
+          ...state.ui,
+          notifications: [...state.ui.notifications, notification]
+        }
+      }))
+
+      // Auto-remove notification after duration
+      if (duration > 0) {
+        setTimeout(() => {
+          set(state => ({
+            ui: {
+              ...state.ui,
+              notifications: state.ui.notifications.filter(n => n.id !== notification.id)
+            }
+          }))
+        }, duration)
+      }
+    },
+
+    removeNotification: (id: string) => {
+      set(state => ({
+        ui: {
+          ...state.ui,
+          notifications: state.ui.notifications.filter(n => n.id !== id)
+        }
+      }))
+    },
+
+    clearNotifications: () => {
+      set(state => ({
+        ui: {
+          ...state.ui,
+          notifications: []
+        }
+      }))
     },
 
     // Reset state

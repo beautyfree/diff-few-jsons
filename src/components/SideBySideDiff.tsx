@@ -32,7 +32,7 @@ export default function SideBySideDiff({ versionA, versionB, className = '', hid
   const unifiedLines: Array<{
     lineA: string | null
     lineB: string | null
-    type: 'unchanged' | 'added' | 'removed' | 'modified'
+    type: 'unchanged' | 'added' | 'removed'
     lineNumberA?: number
     lineNumberB?: number
   }> = []
@@ -73,11 +73,11 @@ export default function SideBySideDiff({ versionA, versionB, className = '', hid
         lineNumberA: lineNumberA++
       })
     } else {
-      // Modified line
+      // Modified line - show as removed on left, added on right
       unifiedLines.push({
         lineA,
         lineB,
-        type: 'modified',
+        type: 'removed',
         lineNumberA: lineNumberA++,
         lineNumberB: lineNumberB++
       })
@@ -171,9 +171,7 @@ export default function SideBySideDiff({ versionA, versionB, className = '', hid
               <div className={`flex-1 border-r px-2 py-1 flex border-l-4 ${
                 line.type === 'removed' 
                   ? 'bg-diff-removed-bg text-diff-removed-text border-diff-removed' 
-                  : line.type === 'modified'
-                    ? 'bg-diff-modified-bg text-diff-modified-text border-diff-modified' 
-                    : 'bg-card text-foreground border-card'
+                  : 'bg-card text-foreground border-card'
               }`}>
                 <span className="text-muted-foreground mr-2 w-8 text-right flex-shrink-0">
                   {line.lineNumberA || ''}
@@ -183,10 +181,10 @@ export default function SideBySideDiff({ versionA, versionB, className = '', hid
 
               {/* Right side - Modified */}
               <div className={`flex-1 px-2 py-1 flex border-l-4 ${
-                line.type === 'added' 
+                line.type === 'removed' && line.lineB !== null
                   ? 'bg-diff-added-bg text-diff-added-text border-diff-added' 
-                  : line.type === 'modified'
-                    ? 'bg-diff-modified-bg text-diff-modified-text border-diff-modified' 
+                  : line.type === 'added'
+                    ? 'bg-diff-added-bg text-diff-added-text border-diff-added' 
                     : 'bg-card text-foreground border-card'
               }`}>
                 <span className="text-muted-foreground mr-2 w-8 text-right flex-shrink-0">
@@ -209,14 +207,6 @@ export default function SideBySideDiff({ versionA, versionB, className = '', hid
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 bg-diff-added-bg border-l-4 border-diff-added"></div>
             <span>Added</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="w-3 h-3 bg-diff-modified-bg"></div>
-            <span>Modified (Left)</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="w-3 h-3 bg-diff-modified-bg"></div>
-            <span>Modified (Right)</span>
           </div>
         </div>
       </div>

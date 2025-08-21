@@ -32,25 +32,20 @@ export interface JsonVersion {
 }
 
 /**
- * Configuration options for diff computation
+ * Notification type
  */
-export interface DiffOptions {
-  /** Strategy for comparing arrays */
-  arrayStrategy: 'index' | 'keyed';
-  /** When using keyed strategy, the path to the key field (e.g., 'id') */
-  arrayKeyPath?: string;
-  /** Rules for ignoring fields during diff */
-  ignoreRules: any[];
-  /** Rules for transforming values before diff */
-  transformRules: any[];
+export interface Notification {
+  /** Unique identifier for the notification */
+  id: string;
+  /** Type of notification */
+  type: 'success' | 'error' | 'info' | 'warning';
+  /** Notification message */
+  message: string;
+  /** When the notification was created */
+  createdAt: number;
+  /** Duration in milliseconds (0 = no auto-dismiss) */
+  duration: number;
 }
-
-/**
- * Represents the current selection state in the UI
- */
-export type Selection = 
-  | { mode: 'timeline'; index: number }
-  | { mode: 'pair'; a: VersionId; b: VersionId };
 
 /**
  * UI-specific state
@@ -60,10 +55,8 @@ export interface UIState {
   theme: 'light' | 'dark';
   /** Whether to hide unchanged nodes in the diff tree */
   hideUnchanged: boolean;
-  /** Current search query */
-  searchQuery: string;
-  /** Whether the rules panel is expanded */
-  rulesPanelExpanded: boolean;
+  /** Active notifications */
+  notifications: Notification[];
 }
 
 /**
@@ -72,12 +65,6 @@ export interface UIState {
 export interface AppState {
   /** All JSON versions in the current session */
   versions: JsonVersion[];
-  /** Current selection (timeline or specific pair) */
-  selection: Selection;
-  /** Diff computation options */
-  options: DiffOptions;
-  /** Cache of computed diffs, keyed by `${a}::${b}::${optionsKey}` */
-  diffCache: Record<string, any>;
   /** UI-specific state */
   ui: UIState;
 }
@@ -88,10 +75,6 @@ export interface AppState {
 export interface Session {
   /** All versions in the session */
   versions: JsonVersion[];
-  /** Diff options */
-  options: DiffOptions;
-  /** Current selection */
-  selection: Selection;
   /** UI state */
   ui: UIState;
   /** Metadata about the session */
